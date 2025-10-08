@@ -149,7 +149,8 @@
             background-size: cover;
             background-position: center;
             opacity: 0.5; /* <-- Opacity set to 50% for visibility */
-            z-index: -1; /* Pushes the image behind the hero content */
+            z-index: 1; /* Pushes the image behind the hero content */
+            background: linear-gradient(#fff, black);
             /* Adjusted soft gradient overlay to allow more image light through */
             box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.8);
         }
