@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InjectedParts.com | Precision Plastic Injection Molding</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Load Michroma Font (Engineering Look) -->
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Configuration and Styles -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Using true pure black as the primary background
+                        'ip-black': '#000000', 
+                        'ip-blue-light': '#42C3FF', // The primary glow/accent color
+                        'ip-blue-dark': '#0084B6',
+                        'ip-accent-critical': '#FFC266', // The Very Light Orange / Amber accent
+                    },
+                    fontFamily: {
+                        // Retaining Inter for general sans-serif clarity
+                        sans: ['Inter', 'sans-serif'],
+                        // Defining a new font family for the engineering style
+                        engineering: ['Michroma', 'sans-serif'], 
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* The crucial style for adding the subtle technical background texture (Black Theme) */
+        body {
+            /* Use true black background */
+            background-color: #000000;
+            color: #FFFFFF; /* Default text is white */
+            
+            /* Layered background images: 
+               1. Radial gradient to ensure the center remains the darkest black.
+               2. Repeating linear gradient for the faint, light-blue diagonal grid texture (0.02 opacity). 
+            */
+            background-image: 
+                radial-gradient(circle at center, rgba(0, 0, 0, 0.9) 0%, #000000 70%),
+                repeating-linear-gradient(45deg, rgba(66, 195, 255, 0.02) 0, rgba(66, 195, 255, 0.02) 1px, transparent 1px, transparent 50px);
+            
+            background-size: 100% 100%, 50px 50px;
+            background-attachment: fixed; /* Ensures the texture stays put */
+            font-family: 'Inter', sans-serif; 
+            min-height: 100vh;
+        }
+
+        .text-engineering {
+            /* Applying the Michroma font */
+            font-family: 'Michroma', 'sans-serif'; 
+            letter-spacing: 1px; 
+            font-weight: 700; 
+        }
+        
+        /* The crucial style for the "subtle light blue halo" on dark cards */
+        .halo-card {
+            background-color: #080808; /* Very dark gray for card contrast against pure black */
+            color: #FFFFFF; /* White text */
+            border: 1px solid rgba(66, 195, 255, 0.1); /* Very subtle border */
+            box-shadow: 0 0 8px rgba(66, 195, 255, 0.2); /* Subtle initial glow */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Hover effect: Brighter glow and slight lift */
+        .halo-card:hover {
+            border-color: rgba(66, 195, 255, 0.4);
+            box-shadow: 0 0 25px rgba(66, 195, 255, 0.6); 
+            transform: translateY(-4px);
+            z-index: 20;
+        }
+        
+        /* Custom styling for inputs within the WHITE form section (Contrast on White) */
+        .form-input-white-bg {
+            background-color: #ffffff; /* White background */
+            border: 2px solid #000000; /* Black border for contrast */
+            color: #000000; /* Black text */
+            padding: 0.75rem 1rem;
+            transition: all 0.2s;
+        }
+        .form-input-white-bg:focus {
+            outline: none;
+            border-color: #42C3FF; /* Light blue focus */
+            box-shadow: 0 0 5px #42C3FF;
+        }
+
+        /* --- Animations for the SUBMIT button --- */
+
+        /* Keyframes for subtle horizontal shake */
+        @keyframes shake-horizontal {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+            20%, 40%, 60%, 80% { transform: translateX(2px); }
+        }
+
+        /* Keyframes for pulsing glow (dark to light) using the light orange/amber color */
+        @keyframes pulse-glow-orange {
+            /* Darker, subtle start */
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 194, 102, 0.4), 0 0 15px rgba(255, 194, 102, 0.2); } 
+            /* Brighter, lighter peak */
+            50% { box-shadow: 0 0 20px rgba(255, 194, 102, 0.9), 0 0 30px rgba(255, 194, 102, 0.7); } 
+        }
+
+        /* Combining animations on the command button */
+        .command-button-animated {
+            /* Smooth transitions for non-animated states */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            
+            /* Apply shake (slower, less aggressive) */
+            animation: 
+                shake-horizontal 4s ease-in-out infinite, 
+                /* Apply pulse glow (2s cycle, smooth alternate) */
+                pulse-glow-orange 2s ease-in-out infinite alternate; 
+        }
+
+        /* Ensuring hover overrides the animation effects for clean interaction */
+        .command-button-animated:hover {
+            animation: none; /* Stop pulsing/shaking on direct hover interaction */
+            box-shadow: 0 0 20px #42C3FF; /* Clean blue glow on hover */
+            transform: translateY(-2px);
+        }
+
+        /* --- Hero Section Background Image Implementation --- */
+        .hero-with-bg-image {
+            position: relative; /* Allows positioning of the pseudo-element */
+            /* Ensure the section uses relative positioning for the background image */
+        }
+        
+        .hero-with-bg-image::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.3ds.com/assets/invest/2023-02/injection-molding-machine-1.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.5; /* <-- Opacity set to 50% for visibility */
+            z-index: -1; /* Pushes the image behind the hero content */
+            /* Adjusted soft gradient overlay to allow more image light through */
+            box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-ip-black text-white">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-ip-black/95 shadow-lg shadow-ip-black/50 border-b border-ip-blue-light/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Brand -->
+                <a href="#" class="flex-shrink-0 text-xl font-bold text-ip-blue-light text-engineering uppercase tracking-widest">
+                    Injected<span class="text-white">Parts.com</span>
+                </a>
+                
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-4 items-center">
+                    
+                    <!-- Link 1: Capabilities (Added pill effect) -->
+                    <a href="#capabilities" class="inline-block px-3 py-1 border border-transparent rounded-full text-white hover:border-white hover:text-ip-blue-light transition duration-150 text-sm font-medium text-engineering">Capabilities</a>
+                    
+                    <!-- Link 2: 4-Step Process (Added pill effect) -->
+                    <a href="#process" class="inline-block px-3 py-1 border border-transparent rounded-full text-white hover:border-white hover:text-ip-blue-light transition duration-150 text-sm font-medium text-engineering">4-Step Process</a>
+                    
+                    <!-- Link 3: Quote Form (Added pill effect) -->
+                    <a href="#quote" class="inline-block px-3 py-1 border border-transparent rounded-full text-white hover:border-white hover:text-ip-blue-light transition duration-150 text-sm font-medium text-engineering">Quote Form</a>
+                    
+                    <!-- Button 1: Nav CTA (Standard button) -->
+                    <a href="#quote" class="px-3 py-1 bg-ip-blue-light text-white rounded-full text-sm font-bold text-engineering hover:bg-white hover:text-ip-black transition duration-150 shadow-lg shadow-ip-blue-light/50">
+                        GET A QUOTE
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Button (Omitted for single-file simplicity) -->
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+
+        <!-- Hero Section - NOW WITH BG IMAGE -->
+        <section class="bg-ip-black py-24 rounded-xl mb-24 text-center hero-with-bg-image">
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-white text-engineering tracking-tighter mb-4">
+                <span class="text-ip-blue-light block sm:inline">PRECISION</span> MOLDING.
+            </h1>
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-white text-engineering tracking-tighter mb-8">
+                FUTURE PARTS.
+            </h1>
+            <p class="text-xl text-gray-200 max-w-3xl mx-auto mb-10">
+                Engineering-grade plastic injection molding, designed for speed, accuracy, and scalability. Turn your CAD file into a final product, fast.
+            </p>
+            <!-- Button 2: Hero CTA -->
+            <a href="#quote" class="inline-block px-8 py-3 bg-ip-blue-light text-white rounded-lg text-base font-bold text-engineering hover:bg-white hover:text-ip-black transition duration-300 shadow-xl shadow-ip-blue-light/40 hover:shadow-ip-blue-light/70 uppercase">
+                Start Your Project
+            </a>
+        </section>
+
+        <!-- Core Capabilities Section -->
+        <section id="capabilities" class="py-16">
+            <h2 class="text-3xl font-bold text-center mb-16 text-ip-blue-light text-engineering">CORE CAPABILITIES</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Capability Card 1 -->
+                <div class="halo-card p-6 rounded-xl">
+                    <div class="text-ip-blue-light mb-4">
+                        <i class="fas fa-rocket text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-engineering">RAPID PROTOTYPING</h3>
+                    <p class="text-gray-200 mb-4 text-sm text-engineering">
+                        Get high-fidelity, injection-molded prototypes in as little as 5 days. Test form, fit, and function with production-grade materials.
+                    </p>
+                    <ul class="text-sm list-disc list-inside space-y-1 text-gray-300 text-engineering">
+                        <li>Fast Tooling Setup</li>
+                        <li>Small Batch Runs</li>
+                        <li>$500+ Initial Quote</li>
+                    </ul>
+                </div>
+
+                <!-- Capability Card 2 -->
+                <div class="halo-card p-6 rounded-xl">
+                    <div class="text-ip-blue-light mb-4">
+                        <i class="fas fa-chart-line text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-engineering">HIGH-VOLUME PRODUCTION</h3>
+                    <p class="text-gray-200 mb-4 text-sm text-engineering">
+                        Seamless scaling from pilot runs to millions of parts. Our automated cells ensure consistent quality and efficiency at scale.
+                    </p>
+                    <ul class="text-sm list-disc list-inside space-y-1 text-gray-300 text-engineering">
+                        <li>24/7 Monitoring</li>
+                        <li>Automated Quality Control</li>
+                        <li>Competitive Cost-Per-Part</li>
+                    </ul>
+                </div>
+
+                <!-- Capability Card 3 -->
+                <div class="halo-card p-6 rounded-xl">
+                    <div class="text-ip-blue-light mb-4">
+                        <i class="fas fa-cogs text-4xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-engineering">ADVANCED TOOLING</h3>
+                    <p class="text-gray-200 mb-4 text-sm text-engineering">
+                        Utilizing multi-cavity, hot-runner systems, and complex actions to deliver challenging geometries with strict tolerances.
+                    </p>
+                    <ul class="text-sm list-disc list-inside space-y-1 text-gray-300 text-engineering">
+                        <li>$\pm 0.005$ in Tolerance</li>
+                        <li>Overmolding & Inserts</li>
+                        <li>Mold Flow Analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4-Step Process Section -->
+        <section id="process" class="py-16">
+            <h2 class="text-3xl font-bold text-center mb-16 text-ip-blue-light text-engineering">OUR 4-STEP PRECISION PROCESS</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Process Step 1 -->
+                <div class="halo-card p-6 rounded-xl flex flex-col items-center text-center">
+                    <div class="text-5xl font-extrabold text-ip-blue-light mb-4 text-engineering">01</div>
+                    <h3 class="text-xl font-bold mb-2 text-engineering">DESIGN REVIEW</h3>
+                    <p class="text-gray-200 text-sm text-engineering">
+                        Submit your 3D CAD files. Our DFM (Design for Manufacturability) team provides a detailed analysis and quote within 24 hours.
+                    </p>
+                </div>
+                
+                <!-- Process Step 2 -->
+                <div class="halo-card p-6 rounded-xl flex flex-col items-center text-center">
+                    <div class="text-5xl font-extrabold text-ip-blue-light mb-4 text-engineering">02</div>
+                    <h3 class="text-xl font-bold mb-2 text-engineering">TOOLING & MOLDING</h3>
+                    <p class="text-gray-200 text-sm text-engineering">
+                        High-grade aluminum or steel tooling is fabricated, followed by mold setup and first-shot injection runs for quality checks.
+                    </p>
+                </div>
+
+                <!-- Process Step 3 -->
+                <div class="halo-card p-6 rounded-xl flex flex-col items-center text-center">
+                    <div class="text-5xl font-extrabold text-ip-blue-light mb-4 text-engineering">03</div>
+                    <h3 class="text-xl font-bold mb-2 text-engineering">QUALITY ASSURANCE</h3>
+                    <p class="text-gray-200 text-sm text-engineering">
+                        Each batch undergoes rigorous inspection, including CMM (Coordinate-Measuring Machine) reports to verify all tolerances.
+                    </p>
+                </div>
+
+                <!-- Process Step 4 -->
+                <div class="halo-card p-6 rounded-xl flex flex-col items-center text-center">
+                    <div class="text-5xl font-extrabold text-ip-blue-light mb-4 text-engineering">04</div>
+                    <h3 class="text-xl font-bold mb-2 text-engineering">FINISHING & SHIPMENT</h3>
+                    <p class="text-gray-200 text-sm text-engineering">
+                        Parts are finished (de-gated, polished, or textured) and securely packaged for fast, tracked shipping worldwide.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quote Request Form Section (HIGH-CONTRAST WHITE) -->
+        <section id="quote" class="py-20 my-16">
+            <!-- White background, dashed orange border (thinner), and shadow for highlight -->
+            <div class="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-xl border-2 border-dashed border-ip-accent-critical shadow-2xl shadow-ip-accent-critical/40">
+                <h2 class="text-3xl font-bold mb-4 text-ip-black text-engineering text-center">REQUEST A FREE QUOTE</h2>
+                <p class="text-lg text-ip-black max-w-2xl mx-auto mb-10 text-center">
+                    Provide the key parameters below. Upload your CAD file for the fastest, most accurate pricing.
+                </p>
+
+                <form class="space-y-8">
+                    <!-- Contact Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-sm font-bold mb-2 text-ip-black text-engineering">FULL NAME *</label>
+                            <input type="text" id="name" name="name" required class="w-full rounded-md form-input-white-bg text-engineering" placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-bold mb-2 text-ip-black text-engineering">EMAIL ADDRESS *</label>
+                            <input type="email" id="email" name="email" required class="w-full rounded-md form-input-white-bg text-engineering" placeholder="john.doe@company.com">
+                        </div>
+                    </div>
+
+                    <!-- Part Details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="part_name" class="block text-sm font-bold mb-2 text-ip-black text-engineering">PROJECT / PART NAME</label>
+                            <input type="text" id="part_name" name="part_name" class="w-full rounded-md form-input-white-bg text-engineering" placeholder="Housing v2.1">
+                        </div>
+                        <div>
+                            <label for="material" class="block text-sm font-bold mb-2 text-ip-black text-engineering">REQUIRED MATERIAL *</label>
+                            <select id="material" name="material" required class="w-full rounded-md form-input-white-bg text-engineering appearance-none">
+                                <option value="" disabled selected class="text-gray-500">Select Material Type...</option>
+                                <option value="ABS">ABS (High Impact)</option>
+                                <option value="PC">Polycarbonate (High Clarity)</option>
+                                <option value="Nylon">Nylon 6/6 (Strength)</option>
+                                <option value="PP">Polypropylene (Flexibility)</option>
+                                <option value="other">Other/Unsure</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Technical Specs -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="quantity" class="block text-sm font-bold mb-2 text-ip-black text-engineering">ANNUAL QUANTITY *</label>
+                            <input type="number" id="quantity" name="quantity" required min="10" class="w-full rounded-md form-input-white-bg text-engineering" placeholder="e.g., 50000">
+                        </div>
+                        <div>
+                            <label for="tolerance" class="block text-sm font-bold mb-2 text-ip-black text-engineering">TOLERANCE SPEC</label>
+                            <select id="tolerance" name="tolerance" class="w-full rounded-md form-input-white-bg text-engineering appearance-none">
+                                <option value="Standard">Standard Industrial</option>
+                                <option value="Precision">Precision ($\pm 0.005$ in)</option>
+                                <option value="Ultra-Precision">Ultra-Precision ($\pm 0.002$ in)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="finish" class="block text-sm font-bold mb-2 text-ip-black text-engineering">SURFACE FINISH</label>
+                            <select id="finish" name="finish" class="w-full rounded-md form-input-white-bg text-engineering appearance-none">
+                                <option value="Molded">Standard Molded</option>
+                                <option value="Polish">High Polish (A1/A2)</option>
+                                <option value="Texture">Textured (MT/SPI)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="pt-4">
+                        <label for="cad_file" class="block text-sm font-bold mb-2 text-ip-black text-engineering">UPLOAD CAD FILE (.STEP, .STL, .IGS) *</label>
+                        <input type="file" id="cad_file" name="cad_file" required accept=".step,.stl,.igs,.iges" class="w-full rounded-md text-sm text-ip-black file:mr-4 file:py-2 file:px-4
+                            file:rounded-full file:border-0 file:text-sm file:font-semibold
+                            file:bg-ip-blue-light file:text-white hover:file:bg-ip-blue-dark transition duration-300">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-8 text-center">
+                        <button type="submit" class="inline-block px-12 py-4 rounded-lg text-lg font-bold text-engineering uppercase 
+                            bg-ip-accent-critical text-ip-black 
+                            command-button-animated">
+                            SUBMIT FOR QUOTE
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-ip-black border-t border-ip-blue-light/10 mt-24 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-400">
+            <div class="text-ip-blue-light text-engineering mb-2">InjectedParts.com | Engineered For Excellence</div>
+            <p>&copy; 2025 InjectedParts Manufacturing. All rights reserved. | <a href="#" class="hover:text-ip-blue-light">Privacy Policy</a></p>
+        </div>
+    </footer>
+    
+</body>
+</html>
